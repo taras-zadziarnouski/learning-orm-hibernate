@@ -9,4 +9,6 @@ public class LearningOrmHibernateApplication {
   public static void main(String[] args) {
     SpringApplication.run(LearningOrmHibernateApplication.class, args);
   }
+
+
 }
