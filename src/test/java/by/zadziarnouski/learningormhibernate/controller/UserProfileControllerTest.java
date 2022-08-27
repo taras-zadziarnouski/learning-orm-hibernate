@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import by.zadziarnouski.learningormhibernate.entity.User;
-import by.zadziarnouski.learningormhibernate.entity.UserId;
-import by.zadziarnouski.learningormhibernate.repository.UserRepository;
+import by.zadziarnouski.learningormhibernate.entity.UserProfile;
+import by.zadziarnouski.learningormhibernate.repository.UserProfileRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,24 +17,26 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class UserControllerTest {
+class UserProfileControllerTest {
 
   @Autowired
-  private UserRepository userRepository;
+  private UserProfileRepository userProfileRepository;
 
   @Autowired
   private MockMvc mockMvc;
 
   @BeforeEach
   void setUp() {
-    UserId userId = new UserId();
-    userId.setFirstname("foo");
-    userId.setLastname("bar");
     User user = new User();
-    user.setId(userId);
+    user.setId(1);
+    user.setFirstname("foo");
+    user.setLastname("bar");
     user.setAge(28);
 
-    userRepository.save(user);
+    UserProfile userProfile = new UserProfile();
+    userProfile.setUser(user);
+
+    userProfileRepository.save(userProfile);
   }
 
   @AfterEach
@@ -43,10 +45,12 @@ class UserControllerTest {
 
   @Test
   void findByFirstName() throws Exception {
-    mockMvc.perform(get("/users/find-by-firstname/foo"))
+    mockMvc.perform(get("/user-profiles/find-by-id/1"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id.firstname").value("foo"))
-        .andExpect(jsonPath("$.id.lastname").value("bar"))
-        .andExpect(jsonPath("$.age").value(28));
+        .andExpect(jsonPath("$.profileId").value(1))
+        .andExpect(jsonPath("$.user.id").value(1))
+        .andExpect(jsonPath("$.user.firstname").value("foo"))
+        .andExpect(jsonPath("$.user.lastname").value("bar"))
+        .andExpect(jsonPath("$.user.age").value(28));
   }
 }

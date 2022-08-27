@@ -1,7 +1,7 @@
 package by.zadziarnouski.learningormhibernate.entity;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -10,7 +10,9 @@ import lombok.Data;
 @Table(name = "user_test")
 public class User {
 
-  @EmbeddedId
-  private UserId id;
+  @Id
+  private long id;
+  private String firstname;
+  private String lastname;
   private Integer age;
 }
